@@ -26,7 +26,7 @@ public interface ElementMetaData extends MetaData
 {
   public enum TypeClassification
   {
-    DATA, HEADER, FOOTER, SECTION, SUBREPORT, CONTROL
+    DATA, HEADER, GROUP_HEADER, FOOTER, GROUP_FOOTER, SECTION, SUBREPORT, CONTROL
   }
 
   /**

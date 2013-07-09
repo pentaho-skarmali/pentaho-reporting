@@ -432,7 +432,7 @@ public class CSVWriter extends AbstractFunction implements OutputFunction
     {
       final int currentIndex = event.getState().getCurrentGroupIndex();
       final Group g = event.getReport().getGroup(currentIndex);
-      collectSubReports(g, ElementMetaData.TypeClassification.HEADER);
+      collectSubReports(g, ElementMetaData.TypeClassification.GROUP_HEADER);
       return;
     }
 
@@ -452,6 +452,8 @@ public class CSVWriter extends AbstractFunction implements OutputFunction
       row.write(getWriter());
 
       final Group g = event.getReport().getGroup(currentIndex);
+
+      // TODO - should this be GROUP_HEADER????
       collectSubReports(g, ElementMetaData.TypeClassification.HEADER);
     }
     catch (IOException ioe)
@@ -479,7 +481,7 @@ public class CSVWriter extends AbstractFunction implements OutputFunction
     {
       final int currentIndex = event.getState().getCurrentGroupIndex();
       final Group g = event.getReport().getGroup(currentIndex);
-      collectSubReports(g, ElementMetaData.TypeClassification.FOOTER);
+      collectSubReports(g, ElementMetaData.TypeClassification.GROUP_FOOTER);
       return;
     }
 
@@ -498,6 +500,8 @@ public class CSVWriter extends AbstractFunction implements OutputFunction
       writeDataRow(event.getDataRow(), row);
       row.write(getWriter());
       final Group g = event.getReport().getGroup(currentIndex);
+
+      // TODO - should this be GROUP_FOOTER
       collectSubReports(g, ElementMetaData.TypeClassification.FOOTER);
     }
     catch (IOException ioe)
