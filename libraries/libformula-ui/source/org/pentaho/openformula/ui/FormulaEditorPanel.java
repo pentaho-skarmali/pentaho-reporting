@@ -201,7 +201,14 @@ public class FormulaEditorPanel extends JComponent implements FieldDefinitionSou
 
     public void run()
     {
-      editorModel.setFormulaText(functionTextArea.getText());
+      String formulaText = functionTextArea.getText();
+      if ((formulaText != null) && (formulaText.length() > 0) && (formulaText.startsWith("=") == false))
+      {
+        formulaText = "=" + formulaText;
+        functionTextArea.setText(formulaText);
+      }
+
+      editorModel.setFormulaText(formulaText);
       editorModel.setCaretPosition(functionTextArea.getCaretPosition());
 
       ignoreTextEvents = false;
@@ -760,7 +767,7 @@ public class FormulaEditorPanel extends JComponent implements FieldDefinitionSou
     try
     {
       final String rawFormula = editorModel.getFormulaText();
-      if (StringUtils.isEmpty(rawFormula))
+      if (StringUtils.isEmpty(rawFormula) || (rawFormula.compareTo("=") == 0))
       {
         errorTextHolder.setText("");
         errorTextHolder.setToolTipText(null);
