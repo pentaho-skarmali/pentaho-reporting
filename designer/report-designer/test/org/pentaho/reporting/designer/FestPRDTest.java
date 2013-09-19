@@ -194,51 +194,43 @@ public class FestPRDTest extends TestCase
     // Select IF formula
     filteredListFixture.doubleClickItem("IF");
 
-    ComponentMatcher JTextFieldComponentMatcher = new ComponentMatcher()
-    {
-      public boolean matches(final Component c)
-      {
-        if (c instanceof JTextField)
-        {
-          return true;
-        }
-
-        return false;
-      }
-    };
-
     // Get all the parameter fields and set values in them.
-    // TODO: Name each parameter field so it is easier to access.
-    Collection<Component> parameterFields = finder.findAll(JTextFieldComponentMatcher);
-    int index = 0;
-    for (Iterator<Component > iterator = parameterFields.iterator(); iterator.hasNext(); )
-    {
-      final Component next = iterator.next();
-      final JTextComponentFixture parameterFixture = new JTextComponentFixture(window.robot, (JTextField)next);
-      if (index == 0)
-      {
-        parameterFixture.setText("1");
-      }
-      else if (index == 1)
-      {
-        parameterFixture.setText("2");
-      }
-      else
-      {
-        parameterFixture.setText("3");
-      }
+    final JTextField param0 = (JTextField)finder.findByName("parameterValue0", JTextField.class);
+    final JTextField param1 = (JTextField)finder.findByName("parameterValue1", JTextField.class);
+    final JTextField param2 = (JTextField)finder.findByName("parameterValue2", JTextField.class);
 
-      index++;
-    }
+    assertEquals("Logical", param0.getText());
+    assertEquals("Any", param1.getText());
+    assertEquals("Any", param2.getText());
+
+    final JLabel label0 = (JLabel)finder.findByName("paramNameLabel0", JLabel.class);
+    final JLabel label1 = (JLabel)finder.findByName("paramNameLabel1", JLabel.class);
+    final JLabel label2 = (JLabel)finder.findByName("paramNameLabel2", JLabel.class);
+
+    assertEquals("Test", label0.getText());
+    assertEquals("Then_value", label1.getText());
+    assertEquals("Otherwise_value", label2.getText());
+
+    JTextComponentFixture paramTF = new JTextComponentFixture(window.robot, param0);
+    paramTF.setText("1");
+
+    paramTF = new JTextComponentFixture(window.robot, param1);
+    paramTF.setText("2");
+
+    paramTF = new JTextComponentFixture(window.robot, param2);
+    paramTF.setText("3");
 
     // Click in the text-area
     final JTextArea formulaTextArea = panel.getFunctionTextArea();
     final JTextComponentFixture formulaTextAreaFixture = new JTextComponentFixture(window.robot, (JTextArea)formulaTextArea);
     formulaTextAreaFixture.click();
 
+    JLabel errorTextHolder = (JLabel)finder.findByName("errorTextHolder");
+    assertEquals("2", errorTextHolder.getText());
+
     // Wait 5 seconds before clicking ok button.  We then wait another 3 seconds to invoke the dialog again.
     // NOTE: The wait times are for demo purposes and are not needed in a real test case.
-    // TODO: Remove wait times.
+    // TODO: Remove wait times after demo.
     block(5);
     fixture.button("OK").click();
     block(3);
@@ -253,8 +245,8 @@ public class FestPRDTest extends TestCase
 
     // Validate that the formula expression evaluates to '2' since the
     // IF part is true.
-    JLabel errorTextHolder = (JLabel)finder.findByName("errorTextHolder");
-    assertEquals(errorTextHolder.getText(), "2");
+    errorTextHolder = (JLabel)finder.findByName("errorTextHolder");
+    assertEquals("2", errorTextHolder.getText());
 
     block(10);
     fixture.button("Cancel").click();
