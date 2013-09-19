@@ -23,6 +23,7 @@ import java.awt.Component;
 import java.util.Collection;
 import java.util.Iterator;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -41,6 +42,8 @@ import org.fest.swing.fixture.FrameFixture;
 import org.fest.swing.fixture.JComboBoxFixture;
 import org.fest.swing.fixture.JListFixture;
 import org.fest.swing.fixture.JTextComponentFixture;
+import org.fest.assertions.*;
+import static org.fest.assertions.Assertions.assertThat;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -169,18 +172,18 @@ public class FestPRDTest extends TestCase
     fixture.requireModal();
 
 
-    final JComboBox categoryComboBox = (JComboBox)finder.findByName(dialog, "categoryComboBox");
-    final JComboBoxFixture comboBoxFixture = new JComboBoxFixture(window.robot, categoryComboBox);
+    JComboBox categoryComboBox = (JComboBox)finder.findByName(dialog, "categoryComboBox");
+    JComboBoxFixture comboBoxFixture = new JComboBoxFixture(window.robot, categoryComboBox);
     comboBoxFixture.selectItem("Logical");
 
     // Since we selected a new item, get a refreshed list
-    final JList filteredFormulaList = (JList)finder.findByName(dialog, "formulaList");
+    JList filteredFormulaList = (JList)finder.findByName(dialog, "formulaList");
     final JListFixture filteredListFixture = new JListFixture(window.robot, filteredFormulaList);
 
     // Select IF formula
     filteredListFixture.doubleClickItem("IF");
 
-    ComponentMatcher componentMatcher = new ComponentMatcher()
+    ComponentMatcher JTextFieldComponentMatcher = new ComponentMatcher()
     {
       public boolean matches(final Component c)
       {
@@ -194,7 +197,7 @@ public class FestPRDTest extends TestCase
     };
 
     // Get all the parameter fields and set values in them.
-    Collection<Component> parameterFields = finder.findAll(componentMatcher);
+    Collection<Component> parameterFields = finder.findAll(JTextFieldComponentMatcher);
     int index = 0;
     for (Iterator<Component > iterator = parameterFields.iterator(); iterator.hasNext(); )
     {
@@ -227,9 +230,16 @@ public class FestPRDTest extends TestCase
 
     // Display formula editor dialog again to display previous values
     fixture.show();
-    final JList prevFormulaList = (JList)finder.findByName(dialog, "formulaList");
-    final JListFixture prevListFixture = new JListFixture(window.robot, prevFormulaList);
-    assertThat(prevFormulaList).si
+
+
+    categoryComboBox = (JComboBox)finder.findByName(dialog, "categoryComboBox");
+    comboBoxFixture = new JComboBoxFixture(window.robot, categoryComboBox);
+
+    assertThat(comboBoxFixture.valueAt(0)).as("Logical");
+
+    JLabel errorTextHolder = (JLabel)finder.findByName("errorTextHolder");
+    System.out.println("****** Error Text: " + errorTextHolder);
+    assertEquals(errorTextHolder.getText(), "2");
 
     block(10);
     fixture.button("Cancel").click();
