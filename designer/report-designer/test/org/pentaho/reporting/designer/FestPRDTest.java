@@ -20,14 +20,19 @@
 package org.pentaho.reporting.designer;
 
 import java.awt.Component;
+import java.util.Collection;
+import java.util.Iterator;
 import javax.swing.JComboBox;
 import javax.swing.JList;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 import junit.framework.TestCase;
+import org.fest.swing.annotation.GUITest;
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.BasicComponentFinder;
 import org.fest.swing.core.ComponentFinder;
+import org.fest.swing.core.ComponentMatcher;
 import org.fest.swing.core.GenericTypeMatcher;
 import org.fest.swing.edt.GuiActionRunner;
 import org.fest.swing.edt.GuiQuery;
@@ -35,11 +40,11 @@ import org.fest.swing.fixture.DialogFixture;
 import org.fest.swing.fixture.FrameFixture;
 import org.fest.swing.fixture.JComboBoxFixture;
 import org.fest.swing.fixture.JListFixture;
+import org.fest.swing.fixture.JTextComponentFixture;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.pentaho.openformula.ui.FormulaEditorDialog;
-import org.pentaho.openformula.ui.FormulaEditorModel;
 import org.pentaho.openformula.ui.FormulaEditorPanel;
 import org.pentaho.reporting.designer.core.DefaultReportDesignerContext;
 import org.pentaho.reporting.designer.core.ReportDesignerBoot;
@@ -123,35 +128,28 @@ public class FestPRDTest extends TestCase
     Component detailsBand = finder.findByName("renderComponent_2");
     window.robot.click(detailsBand);
 
-//    ComponentFinder newfinder = BasicComponentFinder.finderWithNewAwtHierarchy();
-
     // Insert a chart element
     window.menuItemWithPath("Insert", "chart").click();
 
-    // Find the chart element and double-click it
-//    Object element = (Object)finder.findByType(JFreeChart.class);
-
+    // TODO: Find the chart element and double-click it
 
     block(10);
   }
 
-  //  @GUITest     // takes screenshot if test case fails
+  @GUITest     // takes screenshot if test case fails
   @RunsInEDT
   @Test
   public void testFormulaEditorDialog() throws XulException, InterruptedException
   {
-    ComponentFinder finder = BasicComponentFinder.finderWithCurrentAwtHierarchy();
+    final ComponentFinder finder = BasicComponentFinder.finderWithCurrentAwtHierarchy();
 
     final FormulaEditorDialog dialog =
         GUIUtils.createFormulaEditorDialog(new DefaultReportDesignerContext(frame, new TestReportDesignerView()), frame);
 
     final FormulaEditorDialog formulaEditorDialog = (FormulaEditorDialog)finder.findByName("FormulaEditorDialog");
-    FormulaEditorPanel panel = (FormulaEditorPanel)formulaEditorDialog.createContentPane();
-    JTextArea formulaTextArea = panel.getFunctionTextArea();
-    FormulaEditorModel model = panel.getEditorModel();
+    final FormulaEditorPanel panel = (FormulaEditorPanel)formulaEditorDialog.createContentPane();
 
-
-    GenericTypeMatcher genericTypeMatcher = new GenericTypeMatcher(FormulaEditorDialog.class, false)
+    final GenericTypeMatcher genericTypeMatcher = new GenericTypeMatcher(FormulaEditorDialog.class, false)
     {
       protected boolean isMatching(final Component component)
       {
@@ -164,6 +162,7 @@ public class FestPRDTest extends TestCase
       }
     };
 
+    // Create the Formula Editor Dialog fixture
     final DialogFixture fixture = window.dialog(genericTypeMatcher);
     fixture.show();
     fixture.requireVisible();
@@ -181,7 +180,58 @@ public class FestPRDTest extends TestCase
     // Select IF formula
     filteredListFixture.doubleClickItem("IF");
 
-    block(15);
+    ComponentMatcher componentMatcher = new ComponentMatcher()
+    {
+      public boolean matches(final Component c)
+      {
+        if (c instanceof JTextField)
+        {
+          return true;
+        }
+
+        return false;
+      }
+    };
+
+    // Get all the parameter fields and set values in them.
+    Collection<Component> parameterFields = finder.findAll(componentMatcher);
+    int index = 0;
+    for (Iterator<Component > iterator = parameterFields.iterator(); iterator.hasNext(); )
+    {
+      final Component next = iterator.next();
+      final JTextComponentFixture parameterFixture = new JTextComponentFixture(window.robot, (JTextField)next);
+      if (index == 0)
+      {
+        parameterFixture.setText("1");
+      }
+      else if (index == 1)
+      {
+        parameterFixture.setText("2");
+      }
+      else
+      {
+        parameterFixture.setText("3");
+      }
+
+      index++;
+    }
+
+    // Click in the text-area
+    final JTextArea formulaTextArea = panel.getFunctionTextArea();
+    final JTextComponentFixture formulaTextAreaFixture = new JTextComponentFixture(window.robot, (JTextArea)formulaTextArea);
+    formulaTextAreaFixture.click();
+
+    block(5);
     fixture.button("OK").click();
+    block(3);
+
+    // Display formula editor dialog again to display previous values
+    fixture.show();
+    final JList prevFormulaList = (JList)finder.findByName(dialog, "formulaList");
+    final JListFixture prevListFixture = new JListFixture(window.robot, prevFormulaList);
+    assertThat(prevFormulaList).si
+
+    block(10);
+    fixture.button("Cancel").click();
   }
 }
