@@ -120,6 +120,10 @@ public class FestPRDTest extends TestCase
   }
 
   @Test
+  /**
+   * This test case creates a new report, selects the details band and then
+   * inserts a chart element into the details band.
+   */
   public void testInvokeFormulaEditorDialog()
   {
     ComponentFinder finder = BasicComponentFinder.finderWithCurrentAwtHierarchy();
@@ -142,6 +146,13 @@ public class FestPRDTest extends TestCase
   @GUITest     // takes screenshot if test case fails
   @RunsInEDT
   @Test
+  /**
+   * Instantiates a Formula Editor Dialog and selects the Logical cateogry
+   * of formulas.  Then we select the 'IF' formula that has three parameters.
+   * The first parameter is the if part.
+   * The second parameter is the else part
+   * The third parameter is when the if part is false
+   */
   public void testFormulaEditorDialog() throws XulException, InterruptedException
   {
     final ComponentFinder finder = BasicComponentFinder.finderWithCurrentAwtHierarchy();
@@ -197,6 +208,7 @@ public class FestPRDTest extends TestCase
     };
 
     // Get all the parameter fields and set values in them.
+    // TODO: Name each parameter field so it is easier to access.
     Collection<Component> parameterFields = finder.findAll(JTextFieldComponentMatcher);
     int index = 0;
     for (Iterator<Component > iterator = parameterFields.iterator(); iterator.hasNext(); )
@@ -224,6 +236,9 @@ public class FestPRDTest extends TestCase
     final JTextComponentFixture formulaTextAreaFixture = new JTextComponentFixture(window.robot, (JTextArea)formulaTextArea);
     formulaTextAreaFixture.click();
 
+    // Wait 5 seconds before clicking ok button.  We then wait another 3 seconds to invoke the dialog again.
+    // NOTE: The wait times are for demo purposes and are not needed in a real test case.
+    // TODO: Remove wait times.
     block(5);
     fixture.button("OK").click();
     block(3);
@@ -231,14 +246,14 @@ public class FestPRDTest extends TestCase
     // Display formula editor dialog again to display previous values
     fixture.show();
 
-
+    // Lets check to make sure the category comboBox is has 'Logical' selected
     categoryComboBox = (JComboBox)finder.findByName(dialog, "categoryComboBox");
     comboBoxFixture = new JComboBoxFixture(window.robot, categoryComboBox);
-
     assertThat(comboBoxFixture.valueAt(0)).as("Logical");
 
+    // Validate that the formula expression evaluates to '2' since the
+    // IF part is true.
     JLabel errorTextHolder = (JLabel)finder.findByName("errorTextHolder");
-    System.out.println("****** Error Text: " + errorTextHolder);
     assertEquals(errorTextHolder.getText(), "2");
 
     block(10);
