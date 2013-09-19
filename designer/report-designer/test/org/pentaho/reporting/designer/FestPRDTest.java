@@ -20,8 +20,6 @@
 package org.pentaho.reporting.designer;
 
 import java.awt.Component;
-import java.util.Collection;
-import java.util.Iterator;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -29,11 +27,11 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import junit.framework.TestCase;
+import static org.fest.assertions.Assertions.assertThat;
 import org.fest.swing.annotation.GUITest;
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.BasicComponentFinder;
 import org.fest.swing.core.ComponentFinder;
-import org.fest.swing.core.ComponentMatcher;
 import org.fest.swing.core.GenericTypeMatcher;
 import org.fest.swing.edt.GuiActionRunner;
 import org.fest.swing.edt.GuiQuery;
@@ -42,8 +40,6 @@ import org.fest.swing.fixture.FrameFixture;
 import org.fest.swing.fixture.JComboBoxFixture;
 import org.fest.swing.fixture.JListFixture;
 import org.fest.swing.fixture.JTextComponentFixture;
-import org.fest.assertions.*;
-import static org.fest.assertions.Assertions.assertThat;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -227,6 +223,13 @@ public class FestPRDTest extends TestCase
 
     JLabel errorTextHolder = (JLabel)finder.findByName("errorTextHolder");
     assertEquals("2", errorTextHolder.getText());
+
+    // Validate function text area
+    JTextArea functionDescLabel = finder.findByName("functionDescription", JTextArea.class);
+    assertEquals("Specifies a logical test to be performed.", functionDescLabel.getText());
+
+    JLabel functionReturnType = finder.findByName("functionReturnType", JLabel.class);
+    assertEquals("Any", functionReturnType.getText());
 
     // Wait 5 seconds before clicking ok button.  We then wait another 3 seconds to invoke the dialog again.
     // NOTE: The wait times are for demo purposes and are not needed in a real test case.
