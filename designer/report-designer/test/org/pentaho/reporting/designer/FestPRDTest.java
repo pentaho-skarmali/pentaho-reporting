@@ -31,8 +31,10 @@ import static org.fest.assertions.Assertions.assertThat;
 import org.fest.swing.annotation.GUITest;
 import org.fest.swing.annotation.RunsInEDT;
 import org.fest.swing.core.BasicComponentFinder;
+import org.fest.swing.core.BasicRobot;
 import org.fest.swing.core.ComponentFinder;
 import org.fest.swing.core.GenericTypeMatcher;
+import org.fest.swing.core.Robot;
 import org.fest.swing.edt.GuiActionRunner;
 import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.fixture.DialogFixture;
@@ -53,6 +55,7 @@ import org.pentaho.reporting.designer.testsupport.TestReportDesignerView;
 import org.pentaho.reporting.engine.classic.core.ClassicEngineBoot;
 import org.pentaho.ui.xul.XulException;
 
+@GUITest     // takes screenshot if test case fails
 public class FestPRDTest extends TestCase
 {
   private FrameFixture window;
@@ -104,6 +107,10 @@ public class FestPRDTest extends TestCase
 
     window = new FrameFixture(frame);
 
+    // Slow down user gestures (default is 60 ms).
+    // Set between 100-200 to simulate actual user input.
+    window.robot.settings().delayBetweenEvents(1000);
+
     window.show(); // shows the frame to test
     window.requireVisible();
 
@@ -136,10 +143,9 @@ public class FestPRDTest extends TestCase
 
     // TODO: Find the chart element and double-click it
 
-    block(10);
+    block(5);
   }
 
-  @GUITest     // takes screenshot if test case fails
   @RunsInEDT
   @Test
   /**
@@ -233,10 +239,7 @@ public class FestPRDTest extends TestCase
 
     // Wait 5 seconds before clicking ok button.  We then wait another 3 seconds to invoke the dialog again.
     // NOTE: The wait times are for demo purposes and are not needed in a real test case.
-    // TODO: Remove wait times after demo.
-    block(5);
     fixture.button("OK").click();
-    block(3);
 
     // Display formula editor dialog again to display previous values
     fixture.show();
