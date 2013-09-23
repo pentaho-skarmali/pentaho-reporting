@@ -404,7 +404,9 @@ public class DefaultFunctionParameterEditor extends JPanel implements FunctionPa
     final String description = selectedFunction.getParameterDescription(paramPos, Locale.getDefault());
 
     final JLabel paramNameLabel = new JLabel(displayName);
+    paramNameLabel.setName("paramNameLabel" + parameterPosition);
     final JTextField paramTextField = new JTextField();
+    paramTextField.setName("parameterValue" + parameterPosition);
     paramTextField.setText(parameterValue);
     if (parameterValue != null)
     {
@@ -558,7 +560,7 @@ public class DefaultFunctionParameterEditor extends JPanel implements FunctionPa
     return false;
   }
 
-  protected void fireParameterUpdate(final int param, final String text)
+  public void fireParameterUpdate(final int param, final String text)
   {
     final boolean catchAllParameter = isCatchAll(text);
     final ParameterUpdateListener[] updateListeners = listenerList.getListeners(ParameterUpdateListener.class);

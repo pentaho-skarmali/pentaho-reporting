@@ -109,7 +109,8 @@ public class FestPRDTest extends TestCase
 
     // Slow down user gestures (default is 60 ms).
     // Set between 100-200 to simulate actual user input.
-    window.robot.settings().delayBetweenEvents(1000);
+    window.robot.settings().delayBetweenEvents(60);
+//    window.robot.settings().delayBetweenEvents(1500);
 
     window.show(); // shows the frame to test
     window.requireVisible();
@@ -163,7 +164,7 @@ public class FestPRDTest extends TestCase
         GUIUtils.createFormulaEditorDialog(new DefaultReportDesignerContext(frame, new TestReportDesignerView()), frame);
 
     final FormulaEditorDialog formulaEditorDialog = (FormulaEditorDialog)finder.findByName("FormulaEditorDialog");
-    final FormulaEditorPanel panel = (FormulaEditorPanel)formulaEditorDialog.createContentPane();
+    assertNotNull(formulaEditorDialog);
 
     final GenericTypeMatcher genericTypeMatcher = new GenericTypeMatcher(FormulaEditorDialog.class, false)
     {
@@ -223,6 +224,9 @@ public class FestPRDTest extends TestCase
     paramTF.setText("3");
 
     // Click in the text-area
+    final FormulaEditorPanel panel = (FormulaEditorPanel)formulaEditorDialog.createContentPane();
+    assertNotNull(panel);
+
     final JTextArea formulaTextArea = panel.getFunctionTextArea();
     final JTextComponentFixture formulaTextAreaFixture = new JTextComponentFixture(window.robot, (JTextArea)formulaTextArea);
     formulaTextAreaFixture.click();
@@ -237,8 +241,6 @@ public class FestPRDTest extends TestCase
     JLabel functionReturnType = finder.findByName("functionReturnType", JLabel.class);
     assertEquals("Any", functionReturnType.getText());
 
-    // Wait 5 seconds before clicking ok button.  We then wait another 3 seconds to invoke the dialog again.
-    // NOTE: The wait times are for demo purposes and are not needed in a real test case.
     fixture.button("OK").click();
 
     // Display formula editor dialog again to display previous values

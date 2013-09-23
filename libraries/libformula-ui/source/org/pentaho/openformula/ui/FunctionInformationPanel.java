@@ -41,6 +41,8 @@ public class FunctionInformationPanel extends JPanel
    */
   public FunctionInformationPanel()
   {
+    setName("FunctionInformationPanel");
+
     final JLabel returnLabel = new JLabel(Messages.getInstance().getString("FunctionInformationPanel.ReturnType"));
     final Font f = new Font(returnLabel.getFont().getName(), Font.BOLD, returnLabel.getFont().getSize());
     returnLabel.setFont(f);
@@ -49,12 +51,14 @@ public class FunctionInformationPanel extends JPanel
     descLabel.setFont(f);
 
     functionDescription = new JTextArea();
+    functionDescription.setName("functionDescription");
     functionDescription.setEditable(false);
     functionDescription.setLineWrap(true);
     functionDescription.setRows(2);
     functionDescription.setBackground(this.getBackground());
 
     functionReturnType = new JLabel();
+    functionReturnType.setName("functionReturnType");
     functionReturnType.setFont(functionDescription.getFont());
 
     setLayout(new GridBagLayout());

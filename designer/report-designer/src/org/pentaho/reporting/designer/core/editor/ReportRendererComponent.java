@@ -392,6 +392,7 @@ public class ReportRendererComponent extends JComponent
     horizontalLinealComponent = new HorizontalLinealComponent(renderContext, false);
 
     layoutRendererComponent = new JPanel();
+    layoutRendererComponent.setName("layoutRendererComponent");
     layoutRendererComponent.setLayout(new BoxLayout(layoutRendererComponent, BoxLayout.Y_AXIS));
     layoutRendererComponent.setBackground(new Color(0,0,0,0));
     layoutRendererComponent.setBorder(new EmptyBorder(0, 0, 0, 0));
@@ -402,6 +403,7 @@ public class ReportRendererComponent extends JComponent
     getReport().addReportModelListener(new ReportPreviewChangeHandler());
 
     previewView = new ImagePanel(CanvasImageLoader.getInstance().getBackgroundImage().getImage());
+    previewView.setName("previewView");
     previewView.setLayout(new BorderLayout());
     previewView.add(previewComponent, BorderLayout.CENTER);
 
@@ -413,6 +415,7 @@ public class ReportRendererComponent extends JComponent
     verticalLinealsComponent.setBorder(new EmptyBorder(0, 0, 0, 0));
 
     final LayoutScrollable viewPortComponent = new LayoutScrollable();
+    viewPortComponent.setName("viewPortComponent");
     viewPortComponent.add(layoutRendererComponent, BorderLayout.NORTH);
     viewPortComponent.setBackground(new Color(0,0,0,0));
     viewPortComponent.setBorder(new EmptyBorder(0, 0, 0, 0));
@@ -421,6 +424,7 @@ public class ReportRendererComponent extends JComponent
     // effectively disable all key events on scroller
     // PRD-1441
     final JScrollPane reportScrollPane = new NoKeysScrollPane();
+    reportScrollPane.setName("NoKeysScrollPane");
     reportScrollPane.setBorder(new EmptyBorder(0, 0, 0, 0));
     reportScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
     reportScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -624,6 +628,7 @@ public class ReportRendererComponent extends JComponent
 
       if (renderComponent != null)
       {
+        renderComponent.setName("renderComponent_" + i);
         final JPanel renderWrapper = new JPanel(new GridBagLayout());
         renderWrapper.setOpaque(false);
         renderWrapper.setBackground(new Color(0,0,0,0));

@@ -101,10 +101,12 @@ public class FunctionListPanel extends JPanel
     setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 5));
 
     categoryComboBox = new JComboBox();
+    categoryComboBox.setName("categoryComboBox");
     categoryComboBox.addActionListener(new CategorySelectionAction());
     categoryComboBox.setRenderer(new FunctionCategoryCellRenderer());
 
     formulaList = new JList();
+    formulaList.setName("formulaList");
     formulaList.setCellRenderer(new FunctionDescriptionCellRenderer());
     formulaList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     formulaList.addMouseListener(new FormulaListMouseHandler());

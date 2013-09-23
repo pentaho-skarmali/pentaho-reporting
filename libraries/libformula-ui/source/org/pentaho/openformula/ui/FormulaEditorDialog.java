@@ -50,12 +50,14 @@ public class FormulaEditorDialog extends CommonDialog
 
   protected void init()
   {
+    setName("FormulaEditorDialog");
     setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
     setTitle(Messages.getInstance().getString("FormulaEditorDialog.Title"));
     setModal(true);
     setResizable(true);
 
     panel = new FormulaEditorPanel();
+    panel.setName("FormulaEditorPanel");
     
     super.init();
   }
@@ -70,7 +72,7 @@ public class FormulaEditorDialog extends CommonDialog
     return panel.getOperatorPanel();
   }
 
-  protected Component createContentPane()
+  public Component createContentPane()
   {
     return panel;
   }
