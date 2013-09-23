@@ -226,6 +226,7 @@ public abstract class CommonDialog extends JDialog
   protected JPanel createButtonsPane()
   {
     final JButton button = new JButton(getConfirmAction());
+    button.setName("OK");
     button.setDefaultCapable(true);
 
     final JPanel buttonsPanel = new JPanel();
@@ -236,7 +237,9 @@ public abstract class CommonDialog extends JDialog
     }
     if (hasCancelButton())
     {
-      buttonsPanel.add(new JButton(getCancelAction()));
+      final JButton cancelButton = new JButton(getCancelAction());
+      cancelButton.setName("Cancel");
+      buttonsPanel.add(cancelButton);
     }
     if (MacOSXIntegration.MAC_OS_X)
     {

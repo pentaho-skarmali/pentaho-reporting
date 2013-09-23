@@ -47,6 +47,7 @@ public class DefaultReportElementDragHandler extends AbstractReportElementDragHa
   {
     final ElementType type = elementMetaData.create();
     final Element visualElement = (Element) type.create();
+    visualElement.setName(elementMetaData.getName());
 
     final ElementStyleSheet styleSheet = visualElement.getStyle();
     styleSheet.setStyleProperty(ElementStyleKeys.MIN_WIDTH, DEFAULT_WIDTH);

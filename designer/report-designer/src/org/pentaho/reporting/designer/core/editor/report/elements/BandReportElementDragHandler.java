@@ -45,6 +45,8 @@ public class BandReportElementDragHandler extends AbstractReportElementDragHandl
     final ElementStyleSheet styleSheet = visualElement.getStyle();
     styleSheet.setStyleProperty(ElementStyleKeys.MIN_WIDTH, DEFAULT_WIDTH);
     styleSheet.setStyleProperty(ElementStyleKeys.MIN_HEIGHT, DEFAULT_HEIGHT);
+
+    visualElement.setName(elementMetaData.getName());
     return visualElement;
   }
 }

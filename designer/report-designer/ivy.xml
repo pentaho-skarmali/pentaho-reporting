@@ -61,5 +61,7 @@
     <dependency org="${reporting-engine.group}" name="pentaho-reporting-engine-classic-core-test" 
                 rev="${project.revision}" transitive="false" changing="true" conf="test->default"/>
     <dependency org="junit" name="junit" rev="4.10" transitive="false" conf="test->default"/>
+    <!--<dependency org="org.easytesting" name="fest" rev="1.0.16" conf="test->default"/>-->
+    <!--<dependency org="org.easytesting" name="fest-swing" rev="1.2.1" transitive="true" conf="test->default"/>-->
   </dependencies>
 </ivy-module>
